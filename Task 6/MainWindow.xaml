@@ -1,0 +1,46 @@
+﻿<Window x:Class="Task_6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_6"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid x:Name="layout">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Table" Grid.Row="1" Grid.ColumnSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Работы" FontSize= "26" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
+            <Label Content="Станки" FontSize= "26" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"/>
+            <Grid x:Name="works" Grid.Column="1">
+                
+            </Grid>
+            <Grid x:Name="benchs" Grid.Row="2">
+                
+            </Grid>
+        </Grid>
+        <Label Grid.Row="0" Grid.Column="0" FontSize="15" Content="Количество строк"/>
+        <Label Grid.Row="0" Grid.Column="2" FontSize="15" Content="Количество столбцов"/>
+        <TextBox x:Name="RowCount"    FontSize="44" Grid.Row="0" Grid.Column="1" TextChanged="RowCount_TextChanged"/>
+        <TextBox x:Name="ColumnCount" FontSize="44" Grid.Row="0" Grid.Column="3" TextChanged="ColumnCount_TextChanged"/>
+        <Button Grid.Column="4" Grid.Row="0" Content="Распределить"/>
+    </Grid>
+    
+</Window>
