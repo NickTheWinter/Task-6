@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task_6"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="1000">
     <Grid x:Name="layout">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -16,19 +18,19 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="Table" Grid.Row="1" Grid.ColumnSpan="5">
+        <Grid x:Name="Table" Grid.Row="1" Grid.ColumnSpan="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
-            <Label Content="Работы" FontSize= "26" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
-            <Label Content="Станки" FontSize= "26" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"/>
+            <Label x:Name="Works" Content="Работы" FontSize= "26" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label x:Name="Benchs" Content="Станки" FontSize= "26" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"/>
             <Grid x:Name="works" Grid.Column="1">
                 
             </Grid>
@@ -36,11 +38,13 @@
                 
             </Grid>
         </Grid>
-        <Label Grid.Row="0" Grid.Column="0" FontSize="15" Content="Количество строк"/>
-        <Label Grid.Row="0" Grid.Column="2" FontSize="15" Content="Количество столбцов"/>
+        <Label Grid.Row="0" Grid.Column="0" FontSize="15" Content="Кол-во строк"/>
+        <Label Grid.Row="0" Grid.Column="2" FontSize="15" Content="Кол-во столбцов"/>
         <TextBox x:Name="RowCount"    FontSize="44" Grid.Row="0" Grid.Column="1" TextChanged="RowCount_TextChanged"/>
-        <TextBox x:Name="ColumnCount" FontSize="44" Grid.Row="0" Grid.Column="3" TextChanged="ColumnCount_TextChanged"/>
-        <Button Grid.Column="4" Grid.Row="0" Content="Распределить"/>
+        <TextBox x:Name="ColumnCount" FontSize="44" Grid.Row="0" Grid.Column="3" TextChanged="RowCount_TextChanged"/>
+        <Button x:Name="Method" Grid.Column="4" Grid.Row="0" FontSize="16" Content="Применить метод" Click="Method_Click"/>
+        <Button x:Name="Random" Grid.Column="5" Grid.Row="0" FontSize="15" Content="Случайные числа" Click="Random_Click"/>
+        <Button x:Name="Clear" Grid.Column="6" Grid.Row="0" FontSize="20" Content="Очистить" Click="Clear_Click" />
     </Grid>
     
 </Window>
