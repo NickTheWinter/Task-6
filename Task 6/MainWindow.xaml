@@ -5,7 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task_6"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000">
+        Title="MainWindow" Height="650" Width="1000" Icon="https://i.pinimg.com/564x/c7/07/34/c7073412a409e6df0d866f48e0e272d4.jpg" FontSize="20">
+    <Window.Resources>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid x:Name="layout">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -40,7 +80,7 @@
         </Grid>
         <Label Grid.Row="0" Grid.Column="0" FontSize="15" Content="Кол-во строк"/>
         <Label Grid.Row="0" Grid.Column="2" FontSize="15" Content="Кол-во столбцов"/>
-        <TextBox x:Name="RowCount"    FontSize="44" Grid.Row="0" Grid.Column="1" TextChanged="RowCount_TextChanged"/>
+        <TextBox Style="{DynamicResource TextBoxStyle1}" x:Name="RowCount"    FontSize="44" Grid.Row="0" Grid.Column="1" TextChanged="RowCount_TextChanged"/>
         <TextBox x:Name="ColumnCount" FontSize="44" Grid.Row="0" Grid.Column="3" TextChanged="RowCount_TextChanged"/>
         <Button x:Name="Method" Grid.Column="4" Grid.Row="0" FontSize="16" Content="Применить метод" Click="Method_Click"/>
         <Button x:Name="Random" Grid.Column="5" Grid.Row="0" FontSize="15" Content="Случайные числа" Click="Random_Click"/>

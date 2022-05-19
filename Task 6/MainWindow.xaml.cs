@@ -59,6 +59,11 @@ namespace Task_6
                 Benchs.Visibility = Visibility.Hidden;
                 matrix.Children.Clear();
             }
+            if (ColumnCount.Text == "0" || ColumnCount.Text == "" || ColumnCount.Text.Contains(" "))
+            {
+                Works.Visibility = Visibility.Hidden;
+                matrix.Children.Clear();
+            }
 
             benchs.RowDefinitions.Clear();
             benchs.Children.Clear();
@@ -87,9 +92,6 @@ namespace Task_6
             {
                 var col = new ColumnDefinition();
                 matrix.ColumnDefinitions.Add(col);
-
-                var col2 = new ColumnDefinition();
-                newMatrix.ColumnDefinitions.Add(col2);
 
                 var new_row = new ColumnDefinition();
                 works.ColumnDefinitions.Add(new_row);
@@ -144,6 +146,7 @@ namespace Task_6
                 label.VerticalContentAlignment = VerticalAlignment.Center;
                 label.FontSize = benchs.ActualHeight / int.Parse(RowCount.Text);
                 label.Text = "1";
+                label.Style = (Style)Resources["TextBoxStyle1"];
                 benchs.Children.Add(label);
                 Grid.SetColumn(label, 0);
                 Grid.SetRow(label, rowCount);
@@ -158,6 +161,7 @@ namespace Task_6
                 label.VerticalContentAlignment = VerticalAlignment.Bottom;
                 label.FontSize = works.ActualHeight;
                 label.Text = "1";
+                label.Style = (Style)Resources["TextBoxStyle1"];
                 works.Children.Add(label);
                 Grid.SetColumn(label, colCount);
                 Grid.SetRow(label, 0);
@@ -190,11 +194,14 @@ namespace Task_6
 
         private void Method_Click(object sender, RoutedEventArgs e)
         {
+
+
             matrix.Children.Remove(newMatrix);
             matrix.Children.Add(newMatrix);
 
             newMatrix.RowDefinitions.Clear();
             newMatrix.ColumnDefinitions.Clear();
+            newMatrix.Children.Clear();
 
             Grid.SetColumn(newMatrix, 0);
             Grid.SetRow(newMatrix, 0);
@@ -226,13 +233,14 @@ namespace Task_6
                 foreach (var col in newMatrix.ColumnDefinitions)
                 {
                     colCount++;
-                    if(rowCount % 2 == 0 && colCount % 2 == 0)
+                    if (rowCount % 2 == 0 && colCount % 2 == 0)
                     {
                         TextBox newTextBox = new TextBox();
                         newTextBox.TextChanged += TextBox_TextChanged;
                         newTextBox.TextAlignment = TextAlignment.Right;
                         newTextBox.IsReadOnly = true;
                         newTextBox.BorderBrush = null;
+                        newTextBox.Style = (Style)Resources["TextBoxStyle1"];
                         newMatrix.Children.Add(newTextBox);
                         Grid.SetColumn(newTextBox, colCount - 1);
                         Grid.SetRow(newTextBox, rowCount - 1);
@@ -245,7 +253,6 @@ namespace Task_6
                             newTextBox.FontSize = 46;
                         }
                     }
-                    
                 }
             }
 
@@ -260,7 +267,6 @@ namespace Task_6
                     goto end;
                 }
                 for (int i = 0; i < array.GetLength(0); i++)
-                {
                     for (int j = 0; j < array.GetLength(1); j++)
                     {
                         if (array[i, j] == null)
@@ -280,15 +286,13 @@ namespace Task_6
                         else
                             continue;
                     }
-                }
-            mark:
+                mark:
                 Console.WriteLine();
             }
             int?[,] distribution = new int?[rows, cols];
             foreach (TextBox textBox in newMatrix.Children.OfType<TextBox>())
             {
                 for (int i = 0; i < distribution.GetLength(0); i++)
-                {
                     for (int j = 0; j < distribution.GetLength(1); j++)
                     {
                         if (distribution[i, j] == null)
@@ -303,8 +307,7 @@ namespace Task_6
                         else
                             continue;
                     }
-                }
-            mark:
+                mark:
                 Console.WriteLine();
             }
             int minEL = 0;
@@ -313,18 +316,37 @@ namespace Task_6
                 minEL = minInRow(array, i);
                 distribution[i, minEL] = array[i, minEL];
             }
-
-            TextBox[] distMatrix = newMatrix.Children.OfType<TextBox>().ToArray();
-            for (int i = 0; i < distMatrix.Count(); i++)
+            TextBox[,] textBoxes = new TextBox[int.Parse(RowCount.Text), int.Parse(ColumnCount.Text)];
+            TextBox[] textBoxesTPM = newMatrix.Children.OfType<TextBox>().ToArray();
+            int counter = 0;
+            for (int i = 0; i < textBoxes.GetLength(0); i++)
             {
-                for (int j = 0; j < distribution.GetLength(0); j++)
+                for (int j = 0; j < textBoxes.GetLength(1); j++)
                 {
-                    for (int k = 0; k < distribution.GetLength(1); k++)
+                    textBoxes[i, j] = textBoxesTPM[counter];
+                }
+            }
+
+            for (int j = 0; j < distribution.GetLength(0); j++)
+            {
+                for (int k = 0; k < distribution.GetLength(1); k++)
+                {
+                    if (distribution[j, k] != 0 && textBoxes[j, k].Text != "1")
                     {
-                        if (distribution[j, k] == 0)
-                            continue;
-                        distMatrix[i].Text = distribution[j, k].ToString();
+
+                        textBoxes[j, k].Text = "1";
+                        break;
                     }
+
+                }
+
+            }
+            counter = 0;
+            for (int i = 0; i < textBoxes.GetLength(0); i++)
+            {
+                for (int j = 0; j < textBoxes.GetLength(1); j++)
+                {
+                    textBoxesTPM[counter] = textBoxes[i, j];
                 }
             }
 
