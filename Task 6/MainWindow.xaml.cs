@@ -73,9 +73,11 @@ namespace Task_6
 
             matrix.RowDefinitions.Clear();
             matrix.ColumnDefinitions.Clear();
+            matrix.Children.Clear();
 
             newMatrix.RowDefinitions.Clear();
             newMatrix.ColumnDefinitions.Clear();
+            newMatrix.Children.Clear();
 
             int.TryParse(RowCount.Text, out int count);
 
@@ -187,6 +189,7 @@ namespace Task_6
 
         private void Random_Click(object sender, RoutedEventArgs e)
         {
+            newMatrix.Children.Clear();
             Random random = new Random();
             foreach (var textbox in matrix.Children.OfType<TextBox>())
                 textbox.Text = random.Next(1, 10).ToString();
@@ -196,8 +199,8 @@ namespace Task_6
         {
 
 
-            matrix.Children.Remove(newMatrix);
-            matrix.Children.Add(newMatrix);
+            if (!matrix.Children.Contains(newMatrix))
+                matrix.Children.Add(newMatrix);
 
             newMatrix.RowDefinitions.Clear();
             newMatrix.ColumnDefinitions.Clear();
@@ -283,8 +286,6 @@ namespace Task_6
                                 goto end;
                             }
                         }
-                        else
-                            continue;
                     }
                 mark:
                 Console.WriteLine();
@@ -313,51 +314,129 @@ namespace Task_6
             int minEL = 0;
             for (int i = 0; i < array.GetLength(0); i++)
             {
-                minEL = minInRow(array, i);
+                minEL = MinInRow(array, i);
                 distribution[i, minEL] = array[i, minEL];
             }
             TextBox[,] textBoxes = new TextBox[int.Parse(RowCount.Text), int.Parse(ColumnCount.Text)];
-            TextBox[] textBoxesTPM = newMatrix.Children.OfType<TextBox>().ToArray();
+            TextBox[] textBoxesTMP = newMatrix.Children.OfType<TextBox>().ToArray();
+
             int counter = 0;
             for (int i = 0; i < textBoxes.GetLength(0); i++)
             {
                 for (int j = 0; j < textBoxes.GetLength(1); j++)
                 {
-                    textBoxes[i, j] = textBoxesTPM[counter];
+                    textBoxes[i, j] = textBoxesTMP[counter];
+                    counter++;
                 }
             }
 
             for (int j = 0; j < distribution.GetLength(0); j++)
-            {
                 for (int k = 0; k < distribution.GetLength(1); k++)
-                {
                     if (distribution[j, k] != 0 && textBoxes[j, k].Text != "1")
                     {
-
+                        textBoxes[j, k].TextChanged -= TextBox_TextChanged;
                         textBoxes[j, k].Text = "1";
                         break;
                     }
 
-                }
-
-            }
             counter = 0;
             for (int i = 0; i < textBoxes.GetLength(0); i++)
-            {
                 for (int j = 0; j < textBoxes.GetLength(1); j++)
                 {
-                    textBoxesTPM[counter] = textBoxes[i, j];
+                    textBoxesTMP[counter].Text = textBoxes[i, j].Text;
+                    counter++;
                 }
-            }
+            int sum = 0;
+            foreach (var el in distribution)
+                if (el != 0)
+                    sum += (int)el / (int)el;
+            List<int> minInMatrix = MinInMatrix(array, distribution);
+
+            counter = 0;
+        //if (!IsNonDegenerate(sum))
+        //{
+        //    while (!IsNonDegenerate(sum))
+        //    {
+        //        for (int j = 0; j < distribution.GetLength(0); j++)
+        //            for (int k = 0; k < distribution.GetLength(1); k++)
+        //                if (array[j, k] == minInMatrix[counter])
+        //                {
+        //                    textBoxes[j, k].Text = "0";
+        //                    sum++;
+        //                    counter++;
+        //                }
+
+        //    }
+        //}
+        //counter = 0;
+        //for (int i = 0; i < textBoxes.GetLength(0); i++)
+        //    for (int j = 0; j < textBoxes.GetLength(1); j++)
+        //    {
+        //        textBoxesTMP[counter].Text = textBoxes[i, j].Text;
+        //        counter++;
+        //    }
+
 
         end:
             Console.WriteLine();
         }
-        public int minInRow(int?[,] array, int row)
+        public bool IsNonDegenerate(int count)
+        {
+            if (count == (int.Parse(ColumnCount.Text) * int.Parse(RowCount.Text) - 1))
+                return true;
+            return false;
+        }
+        public List<int> MinInMatrix(int?[,] matrix, int?[,] distribution)
+        {
+            int min = 9999999;
+            int sum = 0;
+            int rows = int.Parse(RowCount.Text), cols = int.Parse(ColumnCount.Text);
+            foreach (var el in distribution)
+                if(el != 0)
+                    sum += (int)el / (int)el;
+            int difference = rows * cols - 1 - sum;
+            List<int> minInMatrix = new List<int>();
+            for (int i = 0; i < difference; i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                    for (int k = 0; k < matrix.GetLength(1); k++)
+                        if (matrix[j, k] == distribution[j, k])
+                            matrix[j, k] = 0;
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    for (int k = 0; k < matrix.GetLength(1); k++)
+                    {
+                        try
+                        {
+                            if (matrix[j, k] < min && matrix[j, k] != 0)
+                            {
+                                min = (int)matrix[j, k];
+                                minInMatrix.Add(min);
+                                matrix[j, k] = 0;
+                                goto mark;
+                            }
+                            if (matrix[j + 1, k] < matrix[j, k] && matrix[j + 1, k] != 0)
+                            {
+                                min = (int)matrix[j + 1, k];
+                                minInMatrix.Add(min);
+                                matrix[j + 1, k] = 0;
+                                goto mark;
+                            }
+                        }
+                        catch (IndexOutOfRangeException) { }
+
+                    }
+                }
+            mark:
+                Console.WriteLine();
+            }
+            return minInMatrix;
+        }
+        public int MinInRow(int?[,] array, int row)
         {
             int min = 99999999;
             for (int j = 0; j < array.GetLength(1); j++)
-                if (array[row, j] < min)
+                if (array[row, j] < min && array[row, j] != 0)
                     min = (int)array[row, j];
             for (int i = 0; i < array.GetLength(1); i++)
                 if (array[row, i] == min)
