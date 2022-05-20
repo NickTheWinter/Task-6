@@ -314,7 +314,26 @@ namespace Task_6
             int minEL = 0;
             for (int i = 0; i < array.GetLength(0); i++)
             {
-                minEL = MinInRow(array, i);
+                int min = 99999999;
+
+                for (int j = 0; j < array.GetLength(1); j++)
+                    if (array[i, j] < min && array[i, j] != 0)
+                    {
+
+                        if (i == 0)
+                            min = (int)array[i, j];
+                        else
+                            for (int k = 0; k < array.GetLength(0); k++)
+                            {
+                                if (array[k, j] != distribution[k, j])
+                                    min = (int)array[i, j];
+                            }
+
+                    }
+
+                for (int j = 0; j < array.GetLength(1); j++)
+                    if (array[i, j] == min)
+                        minEL = j;
                 distribution[i, minEL] = array[i, minEL];
             }
             TextBox[,] textBoxes = new TextBox[int.Parse(RowCount.Text), int.Parse(ColumnCount.Text)];
@@ -334,7 +353,6 @@ namespace Task_6
                 for (int k = 0; k < distribution.GetLength(1); k++)
                     if (distribution[j, k] != 0 && textBoxes[j, k].Text != "1")
                     {
-                        textBoxes[j, k].TextChanged -= TextBox_TextChanged;
                         textBoxes[j, k].Text = "1";
                         break;
                     }
@@ -392,7 +410,7 @@ namespace Task_6
             int sum = 0;
             int rows = int.Parse(RowCount.Text), cols = int.Parse(ColumnCount.Text);
             foreach (var el in distribution)
-                if(el != 0)
+                if (el != 0)
                     sum += (int)el / (int)el;
             int difference = rows * cols - 1 - sum;
             List<int> minInMatrix = new List<int>();
@@ -432,16 +450,11 @@ namespace Task_6
             }
             return minInMatrix;
         }
-        public int MinInRow(int?[,] array, int row)
-        {
-            int min = 99999999;
-            for (int j = 0; j < array.GetLength(1); j++)
-                if (array[row, j] < min && array[row, j] != 0)
-                    min = (int)array[row, j];
-            for (int i = 0; i < array.GetLength(1); i++)
-                if (array[row, i] == min)
-                    return i;
-            return 0;
-        }
+        //public int MinInRow(int?[,] array, int row)
+        //{
+            
+        //            return i;
+        //    return 0;
+        //}
     }
 }
